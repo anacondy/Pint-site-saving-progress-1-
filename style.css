@@ -1,0 +1,546 @@
+/* --- GLOBAL & PAGE CONTAINER --- */
+body {
+    margin: 0;
+    font-family: 'Times New Roman', serif;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    color: #333;
+    transition: background-color 0.8s ease, color 0.8s ease;
+}
+
+/* Day/Night Mode (Applies to Home Page) */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+/* Page container for showing/hiding */
+.page-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    position: absolute; /* Allows pages to stack */
+    top: 0;
+    left: 0;
+    z-index: 10; /* Default z-index for active pages */
+}
+
+.page-container.hidden {
+    opacity: 0;
+    visibility: hidden;
+    z-index: -1; /* Send to back when hidden */
+    pointer-events: none; /* Disable interaction when hidden */
+}
+
+
+/* --- HOME PAGE: BACKGROUND TEXT --- */
+.background-text-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.background-text {
+    position: absolute;
+    font-size: 1.5em;
+    opacity: 0.08;
+    white-space: nowrap;
+    animation: waveAndFade 30s infinite alternate ease-in-out;
+    padding: 0 15px;
+    line-height: 1.8;
+}
+
+.background-text:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+.background-text:nth-child(2) { top: 30%; left: 70%; animation-delay: 5s; }
+.background-text:nth-child(3) { top: 50%; left: 20%; animation-delay: 10s; }
+.background-text:nth-child(4) { top: 70%; left: 45%; animation-delay: 15s; }
+
+@keyframes waveAndFade {
+    0% { transform: translate(0, 0); opacity: 0.08; }
+    50% { transform: translate(10px, 5px); opacity: 0.1; }
+    100% { transform: translate(0, 0); opacity: 0.08; }
+}
+
+/* --- HOME PAGE: MAIN UI --- */
+#homePageContainer {
+    z-index: 10;
+    background-color: transparent; /* Allows background text to show */
+}
+
+.image-overlay-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    z-index: 10;
+}
+
+.top-buttons { display: flex; gap: 10px; }
+
+.main-overlay {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 350px;
+    box-sizing: border-box;
+}
+body.dark-mode .main-overlay {
+    background-color: rgba(30, 30, 30, 0.95);
+    color: #e0e0e0;
+}
+
+.generating-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    color: #555;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+}
+body.dark-mode .generating-header {
+    background-color: #444;
+    color: #ccc;
+}
+
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.image-frame {
+    width: 250px;
+    height: 250px;
+    background-color: #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+}
+.image-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+.bottom-input-bar { display: flex; width: 100%; gap: 8px; }
+.bottom-input-bar input {
+    flex-grow: 1; padding: 10px 15px; border: 1px solid #ddd;
+    border-radius: 8px; font-size: 0.9em; background-color: #f9f9f9;
+}
+body.dark-mode .bottom-input-bar input {
+    background-color: #333; border-color: #555; color: #e0e0e0;
+}
+
+.close-button {
+    background-color: #e0e0e0; border: none; border-radius: 8px;
+    padding: 10px 15px; cursor: pointer; font-size: 1em; color: #666;
+}
+body.dark-mode .close-button { background-color: #555; color: #ddd; }
+.close-button:hover { background-color: #d0d0d0; }
+
+.right-buttons {
+    position: absolute; right: -130px; top: 0;
+    display: flex; flex-direction: column; gap: 10px;
+}
+
+.icon-button, .action-button {
+    background-color: rgba(255, 255, 255, 0.95); border: 1px solid #ddd;
+    border-radius: 8px; padding: 10px 15px; font-size: 0.9em; cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+}
+body.dark-mode .icon-button, body.dark-mode .action-button {
+    background-color: rgba(30, 30, 30, 0.95); border-color: #555; color: #e0e0e0;
+}
+.icon-button:hover, .action-button:hover { background-color: #f0f0f0; }
+
+.icon { font-size: 1.2em; }
+
+/* --- HOME PAGE: SETTINGS PANEL --- */
+.settings-panel {
+    position: fixed; bottom: 20px; left: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 12px; padding: 15px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 20; display: flex; flex-direction: column; gap: 10px;
+}
+body.dark-mode .settings-panel {
+    background-color: rgba(40, 40, 40, 0.9); color: #e0e0e0;
+}
+.settings-panel h3 { margin-top: 0; color: #333; }
+body.dark-mode .settings-panel h3 { color: #e0e0e0; }
+.settings-panel label { font-size: 0.95em; color: #555; }
+body.dark-mode .settings-panel label { color: #ccc; }
+.settings-panel input[type="file"] { border: 1px solid #ddd; padding: 8px; border-radius: 6px; }
+.settings-panel button {
+    background-color: #007bff; color: white; border: none;
+    padding: 10px 15px; border-radius: 6px; cursor: pointer;
+}
+.settings-panel button:hover { background-color: #0056b3; }
+.settings-panel p { font-size: 0.85em; color: #777; }
+body.dark-mode .settings-panel p { color: #aaa; }
+
+
+/* --- UPLOAD INTERFACE PAGE --- */
+#uploadInterfaceContainer {
+    background-color: rgba(255, 255, 255, 0.9); /* Lighter background for consistency with Home page */
+    color: #333;
+    font-family: Arial, sans-serif;
+    gap: 30px; /* Increased gap */
+}
+
+/* Close button for overlays */
+.close-overlay-button {
+    background-color: #ff3366;
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000; /* Ensure it's on top of everything */
+}
+.close-overlay-button:hover { background-color: #cc0033; }
+
+
+.upload-main-headline {
+    font-size: 3em;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin: 0;
+    color: #333;
+}
+
+.upload-controls-wrapper {
+    display: flex;
+    flex-direction: column; /* Stack controls vertically */
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Permission Button */
+.permission-button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.permission-button:hover { background-color: #0056b3; }
+
+/* User's Scrollable Gallery */
+.image-gallery-scroll {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px;
+    margin-bottom: 20px; /* Increased margin */
+    max-width: 90vw;
+    background-color: rgba(0, 0, 0, 0.05); /* Slightly darker background for images */
+    border-radius: 10px;
+    min-height: 150px;
+    align-items: center;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.image-gallery-scroll::-webkit-scrollbar { display: none; }
+
+.gallery-image {
+    min-width: 140px;
+    height: 140px;
+    background-color: #ccc; /* Default placeholder */
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    border: 2px solid #ddd;
+    flex-shrink: 0;
+}
+
+/* Drag & Drop Area */
+.drag-drop-area {
+    width: 600px;
+    height: 100px;
+    border: 3px dashed #777;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    color: #aaa;
+    position: relative;
+    cursor: pointer;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    background-color: #f9f9f9; /* Lighter background */
+}
+.drag-drop-area:hover {
+    border-color: #333; /* Darker on hover */
+    background-color: #eee;
+}
+.drag-drop-area input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.call-to-action {
+    background-color: #007bff; /* Changed to blue for consistency */
+    color: #fff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.2em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: Arial, sans-serif;
+}
+.call-to-action:hover { background-color: #0056b3; }
+
+
+/* --- RETRO SETTINGS PAGE STYLES --- */
+
+#retroSettingsContainer {
+    background-color: #050505; /* Dark terminal black */
+    color: #FFA500; /* Amber color */
+    font-family: 'VT323', monospace; /* Retro font */
+    font-size: 20px;
+    text-shadow: 0 0 3px rgba(255, 165, 0, 0.5);
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 100; /* On top of home page, below upload */
+    gap: 20px;
+}
+/* Close button is handled by .close-overlay-button */
+
+.retro-header {
+    width: 100%;
+    padding: 5px;
+    background-color: #FFA500;
+    color: #050505;
+    text-shadow: none;
+    font-size: 22px;
+}
+
+.retro-blinking-cursor {
+    animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+.retro-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 1400px;
+}
+
+.retro-panel {
+    border: 1px solid #FFA500;
+    padding: 15px;
+    height: 300px; /* Fixed height for alignment */
+}
+
+.retro-title {
+    font-size: 24px;
+    color: #FFD700; /* Brighter gold for titles */
+    border-bottom: 1px solid #FFA500;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+}
+
+.retro-pre {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    color: #FFA500;
+    margin: 0;
+}
+
+/* Controls Panel */
+.retro-control {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.retro-button {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    background-color: #FFA500;
+    color: #050505;
+    border: none;
+    cursor: pointer;
+    text-shadow: none;
+    padding: 2px 8px;
+}
+.retro-button:active {
+    background-color: #FFD700;
+    transform: translateY(1px);
+}
+
+#retroDarkModeStatus {
+    color: #FF4500; /* Reddish for "OFF" */
+}
+#retroDarkModeStatus.active {
+    color: #32CD32; /* Green for "ON" */
+}
+.retro-input {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    background-color: rgba(255, 165, 0, 0.2);
+    border: 1px solid #FFA500;
+    color: #FFA500;
+    padding: 5px;
+    flex-grow: 1; /* Allow it to take available space */
+}
+
+
+/* Timezones Panel */
+.retro-time-entry, .retro-conn-entry {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+.retro-label {
+    color: #FFD700;
+}
+.retro-time, .retro-conn {
+    color: #32CD32; /* Green for live data */
+}
+
+.retro-footer {
+    position: absolute;
+    bottom: 20px;
+    font-size: 22px;
+    color: #aaa;
+}
+
+
+/* --- NEW: PINTEREST CALMING PAGE --- */
+#pinterestCalmingPageContainer {
+    background-color: #D3D3C9; /* Muted green/brown from Image 3 */
+    position: fixed; /* Ensures full screen */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* Hide any image overflow */
+    z-index: 200; /* Highest z-index for full screen overlay */
+    flex-direction: row; /* Layout for name and image */
+    justify-content: flex-start; /* Align content to start */
+    align-items: center;
+    padding: 0; /* Remove padding */
+}
+#pinterestCalmingPageContainer.hidden {
+    opacity: 0;
+    visibility: hidden;
+    z-index: -1;
+    pointer-events: none;
+}
+
+
+.pinterest-slideshow {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pinterest-name-overlay {
+    position: absolute;
+    left: 10%; /* Positioning from Image 3 */
+    bottom: 20%; /* Positioning from Image 3 */
+    z-index: 10;
+    pointer-events: none; /* Allow clicks to pass through */
+    overflow: hidden; /* Hide text as it moves up */
+    height: 80px; /* Adjust based on font size */
+    display: flex;
+    align-items: flex-end; /* Align text to bottom of its container */
+}
+
+#pinterestNameText {
+    font-family: 'Arial', sans-serif; /* Or a more nature-like font */
+    font-size: 4em; /* Large text */
+    color: #4CAF50; /* Green color for nature */
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    transition: transform 1s ease-out; /* Smooth slide up animation */
+    white-space: nowrap;
+}
+
+.pinterest-image-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pinterest-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Contain ensures full image visible, doesn't crop */
+    transition: opacity 1.5s ease-in-out; /* Slow fade for slideshow */
+    opacity: 0; /* Start hidden for fade-in */
+    position: absolute;
+}
+
+.pinterest-image.active {
+    opacity: 1;
+}
+
+.pinterest-frost-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30%; /* Adjust width of frosted effect */
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1); /* Slightly translucent white */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    -webkit-backdrop-filter: blur(10px); /* For Safari */
+    pointer-events: none; /* Allow interaction with elements behind */
+    z-index: 5; /* Above image but below name overlay */
+}
