@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poetic Image Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="background-text-container">
+        <p class="background-text">
+            "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife."
+        </p>
+        <p class="background-text">
+            "To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer..." - Hamlet
+        </p>
+        <p class="background-text">
+            "Shall I compare thee to a summer’s day? Thou art more lovely and more temperate." - Sonnet 18
+        </p>
+        <p class="background-text">
+            "All the world's a stage, And all the men and women merely players..." - As You Like It
+        </p>
+    </div>
+
+    <div class="page-container" id="homePageContainer">
+        <div class="image-overlay-container">
+            <div class="top-buttons">
+                <button class="icon-button"><span class="icon">📹</span> Video generation</button>
+                <button class="icon-button"><span class="icon">🖼️</span> I'm the image</button>
+            </div>
+            <div class="main-overlay">
+                <div class="generating-header">
+                    <span class="spinner"></span> Generating image 49%
+                </div>
+                <div class="image-frame" id="homeImageFrame">
+                    <img id="displayImage" src="https://via.placeholder.com/250x250/808080/FFFFFF?text=Loading..." alt="Generated Image">
+                </div>
+                <div class="bottom-input-bar">
+                    <input type="text" id="homeTextInput" placeholder="Make it look dark, HDR style, cinematic look, great..">
+                    <button class="close-button">✖</button>
+                </div>
+            </div>
+            <div class="right-buttons">
+                <button class="action-button"><span class="icon">➕</span> Make variations</button>
+                <button class="action-button"><span class="icon">📄</span> Report a generation</button>
+                <button class="action-button"><span class="icon">🔗</span> Share</button>
+            </div>
+        </div>
+        <div class="settings-panel">
+            <h3>Image Settings</h3>
+            <label for="imageUpload">Upload Custom Image:</label>
+            <input type="file" id="imageUpload" accept="image/*">
+            <button id="resetImage">Reset to Default</button>
+            <p>You can also drag and drop an image onto the frame.</p>
+        </div>
+    </div>
+
+
+    <div class="page-container hidden" id="uploadInterfaceContainer">
+        <button class="close-overlay-button" id="closeUploadInterface">Close</button>
+        <h1 class="upload-main-headline">Upload Your Image</h1>
+
+        <div class="upload-controls-wrapper">
+            <button class="permission-button" id="permissionButton">Grant Gallery Permission</button>
+            <div class="drag-drop-area" id="dragDropArea">
+                Drag & Drop Your Image Here or Click
+                <input type="file" id="uploadImageInput" accept="image/*" multiple>
+            </div>
+        </div>
+
+        <div class="image-gallery-scroll" id="userGallery"></div>
+
+        <button class="call-to-action" id="uploadButton">Upload an image <span class="arrow-icon">→</span></button>
+    </div>
+
+    <div class="page-container hidden" id="retroSettingsContainer">
+        <button class="close-overlay-button" id="closeRetroSettings">Close</button>
+        <div class="retro-header">
+            DEEP-THOUGHT_v4.2 64bit with Kernel 5.1-generic (live-monitor)
+            <span class="retro-blinking-cursor">_</span>
+        </div>
+
+        <div class="retro-grid">
+            <div class="retro-panel">
+                <div class="retro-title">SYSTEM STATUS</div>
+                <pre class="retro-pre">CPU:  <span id="retroCpu">41.1%</span>  nice: 0.0%
+user: <span id="retroUser">31.1%</span>  load: 1.38
+sys:  <span id="retroSys">10.0%</span>  5min: 1.52
+idle: <span id="retroIdle">58.9%</span>  15min: 1.41
+</pre>
+
+                <div class="retro-title">CONTROLS</div>
+                <div class="retro-control">
+                    <span>Home Page Dark Mode:</span>
+                    <button class="retro-button" id="retroDarkModeToggle">[ TOGGLE ]</button>
+                    <span id="retroDarkModeStatus">OFF</span>
+                </div>
+                <div class="retro-control">
+                    <span>System Log:</span>
+                    <button class="retro-button">[ CLEAR ]</button>
+                    <span>OK</span>
+                </div>
+                <div class="retro-control">
+                    <span>Pinterest Board ID:</span>
+                    <input type="text" class="retro-input" id="pinterestBoardID" value="470072049909241031" placeholder="Enter Board ID">
+                </div>
+            </div>
+
+            <div class="retro-panel">
+                <div class="retro-title">LIVE TIMEZONES</div>
+                <div class="retro-time-entry">
+                    <span class="retro-label">IST:</span>
+                    <span class="retro-time" id="timeIST">--:--:-- --</span>
+                </div>
+                <div class="retro-time-entry">
+                    <span class="retro-label">GMT:</span>
+                    <span class="retro-time" id="timeGMT">--:--:-- --</span>
+                </div>
+                <div class="retro-time-entry">
+                    <span class="retro-label">UTAH:</span>
+                    <span class="retro-time" id="timeUTAH">--:--:-- --</span>
+                </div>
+            </div>
+
+            <div class="retro-panel">
+                <div class="retro-title">LIVE CONNECTIONS (SIMULATED)</div>
+                <div class="retro-conn-entry">
+                    <span class="retro-label">Windows:</span>
+                    <span class="retro-conn" id="connWindows">...</span>
+                </div>
+                <div class="retro-conn-entry">
+                    <span class="retro-label">Android:</span>
+                    <span class="retro-conn" id="connAndroid">...</span>
+                </div>
+                <div class="retro-conn-entry">
+                    <span class="retro-label">iOS:</span>
+                    <span class="retro-conn" id="connIOS">...</span>
+                </div>
+                <div class="retro-conn-entry">
+                    <span class="retro-label">Total:</span>
+                    <span class="retro-conn" id="connTotal">...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="retro-footer">
+            Press [ESC] to close monitor...
+        </div>
+    </div>
+
+    <div class="page-container hidden" id="pinterestCalmingPageContainer">
+        <button class="close-overlay-button" id="closePinterestCalmingPage">Close</button>
+        <div class="pinterest-slideshow">
+            <div class="pinterest-name-overlay">
+                <span id="pinterestNameText"></span>
+            </div>
+            <div class="pinterest-image-wrapper">
+                <img id="pinterestImage" src="" alt="Pinterest Image" class="pinterest-image">
+                <div class="pinterest-frost-effect"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
