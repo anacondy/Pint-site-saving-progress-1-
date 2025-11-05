@@ -13,6 +13,7 @@ const CONFIG = {
     DEFAULT_IMAGE_URL: 'https://via.placeholder.com/250x250/808080/FFFFFF?text=Generated+Image',
     TRIGGER_NAME: 'alan', // Name to trigger Pinterest page
     DEFAULT_BOARD_ID: '470072049909241031',
+    MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB in bytes
 };
 
 // Utility functions
@@ -190,10 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        // Check file size (max 10MB)
-        const maxSize = 10 * 1024 * 1024;
-        if (file.size > maxSize) {
-            alert('File size too large. Please select an image under 10MB.');
+        // Check file size
+        if (file.size > CONFIG.MAX_FILE_SIZE) {
+            alert(`File size too large. Please select an image under ${CONFIG.MAX_FILE_SIZE / (1024 * 1024)}MB.`);
             return;
         }
         
@@ -299,8 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Array.from(files).forEach(file => {
             if (file.type.startsWith('image/')) {
                 // Check file size
-                const maxSize = 10 * 1024 * 1024; // 10MB
-                if (file.size > maxSize) {
+                if (file.size > CONFIG.MAX_FILE_SIZE) {
                     console.warn(`File ${file.name} is too large. Skipping.`);
                     return;
                 }
