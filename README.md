@@ -2,7 +2,16 @@
 
 A modern, interactive web application for displaying and managing images with a poetic aesthetic. Features include drag-and-drop uploads, keyboard shortcuts, system theme detection, and a Pinterest slideshow integration.
 
-![Home Page](https://github.com/user-attachments/assets/2522d762-9dc5-48de-acc4-f22c1ca6d690)
+## Screenshots
+
+### Home Page (Light Mode)
+![Home Page Light Mode](https://github.com/user-attachments/assets/138ac37a-f6a4-4c3e-94c0-82eabe69e44d)
+
+### Upload Interface (U+F for 3 seconds)
+![Upload Interface](https://github.com/user-attachments/assets/7ddac775-cde3-4df8-b6d8-def98147c9ef)
+
+### Retro Settings Terminal (S+F for 3 seconds)
+![Retro Settings Page](https://github.com/user-attachments/assets/38a764f4-56fd-41b1-8d3b-07225129f2ff)
 
 ## Features
 
